@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0">
+        <title>Audio player</title>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <style>
+          body {
+  background-color: #000;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+.audio-player-container {
+  /* background-color: #49F; */
+  display: grid;
+  grid-template-columns: repeat(4, 3%) 70% 3% 15%;
+  justify-items: center;
+  align-items: center;
+  min-height: 50px;
+  padding: 5% 10%;
+}
+/* .audio-player-container>span, .audio-player-container>div  {
+  border: 1px solid gray;
+} */
+span img {
+  cursor: pointer;
+}
+.seeker-container {
+  width: 90%;
+  padding: 2% 4%;
+  display: grid;
+  grid-template-rows: 1fr 2fr;
+  border-radius: 10px;
+}
+.volume {
+  display: grid;
+  grid-template-columns: 10% 90%;
+  align-items: center;
+  width: 100%;
+  
+}
+        </style>
+    </head>
+    <body>
+        <div class="audio-player-container">
+            <span class="rewind fa fa-caret-left"></span>
+            <span class="play-pause fa fa-play-circle"></span>
+            <span class="forward fas fa-caret-right"></span>
+            <span class="stop fa fa-stop-circle"></span>
+            <div class="seeker-container" style="background-color: rgba(200, 200, 200, 0.1)">
+                <div>
+                    <span class="current-time">00:00</span>
+                    <span class="duration" style="float: right;">00:00</span>
+                </div>
+                <input type="range" name="seeker" class="seeker" min="0" step="1" value="0">
+            </div>
+            <span class="download fas fa-download"></span>
+            <div class="volume">
+                <span class="fa fa-volume-up"></span>
+                <input style="margin-left: 15%;" type="range" name="seeker" class="volume-level" min="0" step="0.1" value="0.5" max="1">
+            </div>
+        </div>
+        <script type="text/javascript">
+            const _ = (selector) => {
+                return document.querySelector(selector);
+            };
+
+            const audioFile = new Audio();
+            
+            
+            _('.seeker').addEventListener('change', ()=>{
+                jumpTo(_('.seeker').value);
+            });
+
+            _('.volume-level').addEventListener('change', ()=>{
+                audioFile.volume = _('.volume-level').value;
+            });
+
+            _('.stop').addEventListener('click', ()=>{
+                audioFile.pause();
+                audioFile.currentTime = 0;
+                _(".play-pause").classList.remove('fa-pause-circle');
+                _(".play-pause").classList.add('fa-play-circle');
+            });
+
+            _('.rewind').addEventListener('click', ()=>{
+                audioFile.currentTime = audioFile.currentTime - 5;
+            });
+
+            _('.forward').addEventListener('click', ()=>{
+                audioFile.currentTime = audioFile.currentTime + 5;
+            });
+
+            const togglePlayPause = ()=> {
+              audioFile.src = "09 Track 9.mp3";
+                if(audioFile.paused) {
+                  audioFile.play();
+                  _(".play-pause").classList.remove('fa-play-circle');
+                  _(".play-pause").classList.add('fa-pause-circle');
+                } else {
+                  audioFile.pause();
+                  _(".play-pause").classList.remove('fa-pause-circle');
+                  _(".play-pause").classList.add('fa-play-circle');;
+                }
+                
+                audioFile.volume = _('.volume-level').value;
+
+                _('.seeker').max = Math.floor(audioFile.duration);
+                _('.duration').textContent = Math.floor(audioFile.duration);
+                setInterval(()=>{
+                    _('.current-time').textContent = Math.floor(audioFile.currentTime);
+                    _('.seeker').value = Math.floor(audioFile.currentTime);
+                }, 100);
+            };
+            _(".play-pause").addEventListener('click', ()=>{
+                togglePlayPause();
+            });
+            const jumpTo = (c)=> {
+                audioFile.currentTime = c;
+            };
+        </script>
+    </body>
+</html>
