@@ -5,61 +5,35 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.0">
         <title>Audio player</title>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-        <style>
-          body {
-  background-color: #000;
-  color: white;
-  margin: 0;
-  padding: 0;
-}
-.audio-player-container {
-  /* background-color: #49F; */
-  display: grid;
-  grid-template-columns: repeat(4, 3%) 70% 3% 15%;
-  justify-items: center;
-  align-items: center;
-  min-height: 50px;
-  padding: 5% 10%;
-}
-/* .audio-player-container>span, .audio-player-container>div  {
-  border: 1px solid gray;
-} */
-span img {
-  cursor: pointer;
-}
-.seeker-container {
-  width: 90%;
-  padding: 2% 4%;
-  display: grid;
-  grid-template-rows: 1fr 2fr;
-  border-radius: 10px;
-}
-.volume {
-  display: grid;
-  grid-template-columns: 10% 90%;
-  align-items: center;
-  width: 100%;
-  
-}
-        </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
         <div class="audio-player-container">
-            <span class="rewind fa fa-caret-left"></span>
-            <span class="play-pause fa fa-play-circle"></span>
-            <span class="forward fas fa-caret-right"></span>
-            <span class="stop fa fa-stop-circle"></span>
-            <div class="seeker-container" style="background-color: rgba(200, 200, 200, 0.1)">
-                <div>
-                    <span class="current-time">00:00</span>
-                    <span class="duration" style="float: right;">00:00</span>
+            <!-- <img src="https://office.theharvestword.org/images/album_art/album_art_default.png"> -->
+            <img src="https://www.digitalcitizen.life/sites/default/files/styles/img_amp/public/featured/2015-10/groove.jpg">
+            <div class="audio-player-col-2">
+                <div class="audio-meta">
+                    <header>Jesus The Resurrection and The Life</header>
+                    <span><i>Nathaniel Bassey</i></span>
                 </div>
-                <input type="range" name="seeker" class="seeker" min="0" step="1" value="0">
-            </div>
-            <span class="download fas fa-download"></span>
-            <div class="volume">
-                <span class="fa fa-volume-up"></span>
-                <input style="margin-left: 15%;" type="range" name="seeker" class="volume-level" min="0" step="0.1" value="0.5" max="1">
+                <div class="playback">
+                    <div class="playback-seeker-controls">
+                        <span class="rewind fa fa-caret-left"></span>
+                        <span class="play-pause fa fa-play-circle"></span>
+                        <span class="forward fa fa-caret-right"></span>
+                        <span class="stop fa fa-stop-circle"></span>
+                    </div>
+                    <div class="seeker-container">
+                        <span class="current-time">00:00</span>
+                        <input type="range" name="seeker" class="seeker" min="0" step="1" value="0">
+                        <span class="duration" style="float: right;">00:00</span>
+                    </div>
+                    <span class="download fas fa-download"></span>
+                    <div class="volume">
+                        <span class="mute fa fa-volume-up"></span>
+                        <input type="range" name="seeker" class="volume-level" min="0" step="0.1" value="0.5" max="1">
+                    </div>
+                </div>
             </div>
         </div>
         <script type="text/javascript">
@@ -69,13 +43,29 @@ span img {
 
             const audioFile = new Audio();
             
-            
             _('.seeker').addEventListener('change', ()=>{
                 jumpTo(_('.seeker').value);
             });
 
             _('.volume-level').addEventListener('change', ()=>{
                 audioFile.volume = _('.volume-level').value;
+                if(audioFile.muted) {
+                    audioFile.muted = false;
+                    _(".mute").classList.remove('fa-volume-mute');
+                    _(".mute").classList.add('fa-volume-up');
+                }
+            });
+
+            _('.mute').addEventListener('click', ()=>{
+                if(!audioFile.muted) {
+                    audioFile.muted = true;
+                    _(".mute").classList.remove('fa-volume-up');
+                    _(".mute").classList.add('fa-volume-mute');
+                } else {
+                    audioFile.muted = false;
+                    _(".mute").classList.remove('fa-volume-mute');
+                    _(".mute").classList.add('fa-volume-up');
+                }
             });
 
             _('.stop').addEventListener('click', ()=>{
@@ -94,7 +84,6 @@ span img {
             });
 
             const togglePlayPause = ()=> {
-              audioFile.src = "09 Track 9.mp3";
                 if(audioFile.paused) {
                   audioFile.play();
                   _(".play-pause").classList.remove('fa-play-circle');
@@ -105,20 +94,46 @@ span img {
                   _(".play-pause").classList.add('fa-play-circle');;
                 }
                 
+                audioFile.addEventListener('loadeddata',()=>{
+                    _('.duration').textContent = formatDuration(audioFile.duration);
+                    _('.seeker').max = Math.floor(audioFile.duration);
+                });
                 audioFile.volume = _('.volume-level').value;
 
-                _('.seeker').max = Math.floor(audioFile.duration);
-                _('.duration').textContent = Math.floor(audioFile.duration);
+                
                 setInterval(()=>{
-                    _('.current-time').textContent = Math.floor(audioFile.currentTime);
+                    _('.current-time').textContent = formatDuration(audioFile.currentTime);
                     _('.seeker').value = Math.floor(audioFile.currentTime);
                 }, 100);
             };
             _(".play-pause").addEventListener('click', ()=>{
+                if(!audioFile.src) {
+                    audioFile.src = "09 Track 9.mp3";
+                    //audioFile.src = "https://office.theharvestword.org/sermons/Eternal Life.mp3";
+                };
                 togglePlayPause();
             });
             const jumpTo = (c)=> {
                 audioFile.currentTime = c;
+            };
+
+            const formatDuration = (duration)=> {
+                let hrs = Math.floor(duration/3600);
+                let mins = Math.floor(duration / 60);
+                let secs = Math.floor(duration % 60);
+                if(hrs < 10 && hrs > 0) {
+                    hrs = '0' + hrs;
+                }
+                if(mins < 10) {
+                    mins = '0' + mins;
+                }
+                if(secs < 10) {
+                    secs = '0' + secs;
+                }
+                if (hrs === 0) {
+                    return mins + ":" + secs;    
+                }
+                return hrs + ":" + mins + ":" + secs;
             };
         </script>
     </body>

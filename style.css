@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000;
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+}
+.audio-player-container {
+    background-color: #555;
+    display: grid;
+    grid-template-columns: 15% 84%;
+    grid-column-gap: 1%;
+    justify-items: center;
+    align-items: center;
+    padding: 2% 5%;
+}
+.audio-player-container>img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+.audio-player-col-2 {
+    width: 100%;
+}
+.audio-meta {
+    margin-bottom: 3%;
+}
+.audio-meta>header {
+    font-weight: 600;
+    font-size: large;
+}
+.playback {
+    display: grid;
+    grid-template-columns: 10% 71% 5% 10%;
+    grid-column-gap: 1%;
+    align-items: center;
+    justify-items: center;
+    padding: 1% 2%;
+    background-color: rgba(200, 200, 200, 0.1);
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+.seeker-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 5% 88% 5%;
+    align-items: center;
+    justify-items: center;
+    grid-column-gap: 1%;
+}
+.seeker-container>input {
+    width: 98%;
+}
+.volume {
+    display: grid;
+    grid-template-columns: 10% 80%;
+    grid-column-gap: 10%;
+    align-items: center;
+    width: 100%;
+}
+.volume-level {
+    margin-left: 20%;
+}
+.fa, .fas {
+    font-size: 1.5em;
+    cursor: pointer;
+}
