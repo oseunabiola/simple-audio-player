@@ -8,8 +8,13 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <div class="audio-player-container">
-            <!-- <img src="https://office.theharvestword.org/images/album_art/album_art_default.png"> -->
+        <section class="browse-file">
+            <div class="input-field">
+                <input type="file" name="file" accept="audio/mpeg">
+                <button type="submit">Select</button>
+            </div>
+        </section>
+        <section class="audio-player-container">
             <img src="https://www.digitalcitizen.life/sites/default/files/styles/img_amp/public/featured/2015-10/groove.jpg">
             <div class="audio-player-col-2">
                 <div class="audio-meta">
@@ -18,10 +23,10 @@
                 </div>
                 <div class="playback">
                     <div class="playback-seeker-controls">
-                        <span class="rewind fa fa-caret-left"></span>
-                        <span class="play-pause fa fa-play-circle"></span>
-                        <span class="forward fa fa-caret-right"></span>
-                        <span class="stop fa fa-stop-circle"></span>
+                        <span class="rewind fa fa-caret-left" title="Rewind"></span>
+                        <span class="play-pause fa fa-play-circle" title="Play/Pause"></span>
+                        <span class="forward fa fa-caret-right" title="Forward"></span>
+                        <span class="stop fa fa-stop-circle" title="Stop"></span>
                     </div>
                     <div class="seeker-container">
                         <span class="current-time">00:00</span>
@@ -35,106 +40,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <script type="text/javascript">
-            const _ = (selector) => {
-                return document.querySelector(selector);
-            };
-
-            const audioFile = new Audio();
-            
-            _('.seeker').addEventListener('change', ()=>{
-                jumpTo(_('.seeker').value);
-            });
-
-            _('.volume-level').addEventListener('change', ()=>{
-                audioFile.volume = _('.volume-level').value;
-                if(audioFile.muted) {
-                    audioFile.muted = false;
-                    _(".mute").classList.remove('fa-volume-mute');
-                    _(".mute").classList.add('fa-volume-up');
-                }
-            });
-
-            _('.mute').addEventListener('click', ()=>{
-                if(!audioFile.muted) {
-                    audioFile.muted = true;
-                    _(".mute").classList.remove('fa-volume-up');
-                    _(".mute").classList.add('fa-volume-mute');
-                } else {
-                    audioFile.muted = false;
-                    _(".mute").classList.remove('fa-volume-mute');
-                    _(".mute").classList.add('fa-volume-up');
-                }
-            });
-
-            _('.stop').addEventListener('click', ()=>{
-                audioFile.pause();
-                audioFile.currentTime = 0;
-                _(".play-pause").classList.remove('fa-pause-circle');
-                _(".play-pause").classList.add('fa-play-circle');
-            });
-
-            _('.rewind').addEventListener('click', ()=>{
-                audioFile.currentTime = audioFile.currentTime - 5;
-            });
-
-            _('.forward').addEventListener('click', ()=>{
-                audioFile.currentTime = audioFile.currentTime + 5;
-            });
-
-            const togglePlayPause = ()=> {
-                if(audioFile.paused) {
-                  audioFile.play();
-                  _(".play-pause").classList.remove('fa-play-circle');
-                  _(".play-pause").classList.add('fa-pause-circle');
-                } else {
-                  audioFile.pause();
-                  _(".play-pause").classList.remove('fa-pause-circle');
-                  _(".play-pause").classList.add('fa-play-circle');;
-                }
-                
-                audioFile.addEventListener('loadeddata',()=>{
-                    _('.duration').textContent = formatDuration(audioFile.duration);
-                    _('.seeker').max = Math.floor(audioFile.duration);
-                });
-                audioFile.volume = _('.volume-level').value;
-
-                
-                setInterval(()=>{
-                    _('.current-time').textContent = formatDuration(audioFile.currentTime);
-                    _('.seeker').value = Math.floor(audioFile.currentTime);
-                }, 100);
-            };
-            _(".play-pause").addEventListener('click', ()=>{
-                if(!audioFile.src) {
-                    audioFile.src = "09 Track 9.mp3";
-                    //audioFile.src = "https://office.theharvestword.org/sermons/Eternal Life.mp3";
-                };
-                togglePlayPause();
-            });
-            const jumpTo = (c)=> {
-                audioFile.currentTime = c;
-            };
-
-            const formatDuration = (duration)=> {
-                let hrs = Math.floor(duration/3600);
-                let mins = Math.floor(duration / 60);
-                let secs = Math.floor(duration % 60);
-                if(hrs < 10 && hrs > 0) {
-                    hrs = '0' + hrs;
-                }
-                if(mins < 10) {
-                    mins = '0' + mins;
-                }
-                if(secs < 10) {
-                    secs = '0' + secs;
-                }
-                if (hrs === 0) {
-                    return mins + ":" + secs;    
-                }
-                return hrs + ":" + mins + ":" + secs;
-            };
-        </script>
+        </section>
+        <script type="text/javascript" src="player.js"></script>
     </body>
 </html>

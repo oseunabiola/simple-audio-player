@@ -4,9 +4,9 @@ body {
     font-family: 'Montserrat', sans-serif;
     background-color: #000;
     color: white;
+    font-weight: 300;
     margin: 0;
     padding: 0;
-    font-weight: 300;
 }
 .audio-player-container {
     background-color: #555;
@@ -66,5 +66,31 @@ body {
 }
 .fa, .fas {
     font-size: 1.5em;
+    cursor: pointer;
+}
+.browse-file {
+    display: grid;
+    background-color: gray;
+    padding: 2%;
+}
+.input-field {
+    border: 1px solid #555;
+    border-radius: 10px;
+    background-color: #FFC;
+    padding-left: 1%;
+    grid-template-columns: 1.5fr 1fr;
+    width: 35%;
+    justify-self: center;
+}
+.input-field>input {
+    color: black;
+    width: 78%;
+    justify-self: self-end;
+}
+button {
+    width: 20%;
+    padding: 2% 5%;
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 }
